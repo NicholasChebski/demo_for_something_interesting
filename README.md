@@ -1,2 +1,2 @@
 # demo_for_something_interesting
-Demo...
+Демо-сайт с деплоем на GitHub Pages
