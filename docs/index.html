@@ -17,8 +17,8 @@
       --shadow: 0 14px 50px rgba(0,0,0,.55);
       --r: 18px;
       --max: 1040px;
-      --accent: #ffb703; /* горчица */
-      --accent2: #fb8500; /* шафран/соус */
+      --accent: #ffb703;
+      --accent2: #fb8500;
     }
 
     @media (prefers-color-scheme: light){
@@ -72,14 +72,9 @@
       pointer-events:none;
     }
 
-    .title{
-      position: relative;
-      z-index: 1;
-    }
+    .title{ position: relative; z-index: 1; }
     .kicker{
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      display: inline-flex; align-items: center; gap: 8px;
       padding: 6px 10px;
       border: 1px solid var(--line);
       border-radius: 999px;
@@ -93,18 +88,8 @@
       letter-spacing: -0.02em;
       line-height: 1.1;
     }
-    .subtitle{
-      margin: 0;
-      color: var(--muted);
-      font-size: 16px;
-      max-width: 52ch;
-    }
-    .chips{
-      display:flex;
-      gap:10px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
+    .subtitle{ margin: 0; color: var(--muted); font-size: 16px; max-width: 52ch; }
+    .chips{ display:flex; gap:10px; flex-wrap: wrap; margin-top: 14px; }
     .chip{
       border: 1px solid var(--line);
       background: rgba(255,255,255,.03);
@@ -114,14 +99,7 @@
       color: var(--muted);
     }
 
-    nav{
-      margin: 20px 0 0;
-      display:flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 1;
-    }
+    nav{ margin: 20px 0 0; display:flex; gap: 12px; flex-wrap: wrap; position: relative; z-index: 1; }
     .navlink{
       border: 1px solid var(--line);
       padding: 9px 12px;
@@ -153,6 +131,7 @@
       height: 100%;
       transform: translateX(0%);
       transition: transform 400ms ease;
+      will-change: transform;
     }
     figure.slide{
       margin: 0;
@@ -170,12 +149,12 @@
       display:block;
       filter: saturate(1.05) contrast(1.02);
       transform: scale(1.01);
+      user-select: none;
+      -webkit-user-drag: none;
     }
     .caption{
       position: absolute;
-      left: 12px;
-      right: 12px;
-      bottom: 12px;
+      left: 12px; right: 12px; bottom: 12px;
       padding: 10px 12px;
       border-radius: 14px;
       background: linear-gradient(180deg, rgba(0,0,0,.00), rgba(0,0,0,.40));
@@ -183,19 +162,22 @@
       font-size: 13px;
       border: 1px solid rgba(255,255,255,.16);
       backdrop-filter: blur(10px);
+      z-index: 1;
     }
 
+    /* IMPORTANT FIX:
+       Don't disable pointer events on the overlay container; some webviews treat it as disabling the whole subtree. */
     .controls{
       position: absolute;
       inset: 0;
       display:flex;
       align-items: center;
       justify-content: space-between;
-      pointer-events: none;
       padding: 10px;
+      pointer-events: auto;
+      z-index: 2;
     }
     .btn{
-      pointer-events: auto;
       border: 1px solid rgba(255,255,255,.22);
       background: rgba(0,0,0,.28);
       color: white;
@@ -206,6 +188,8 @@
       place-items: center;
       cursor: pointer;
       backdrop-filter: blur(8px);
+      user-select: none;
+      z-index: 3;
     }
     @media (prefers-color-scheme: light){
       .btn{
@@ -222,13 +206,11 @@
 
     .dots{
       position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 10px;
+      left: 0; right: 0; bottom: 10px;
       display:flex;
       justify-content: center;
       gap: 8px;
-      pointer-events: auto;
+      z-index: 4; /* above controls */
     }
     .dot{
       width: 10px;
@@ -237,6 +219,7 @@
       border: 1px solid rgba(255,255,255,.35);
       background: rgba(255,255,255,.18);
       cursor: pointer;
+      padding: 0;
     }
     .dot[aria-current="true"]{
       background: var(--accent);
@@ -244,13 +227,7 @@
       box-shadow: 0 0 0 3px rgba(255,183,3,.25);
     }
 
-    /* Layout sections */
-    main{
-      margin-top: 22px;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-    }
+    main{ margin-top: 22px; display: grid; grid-template-columns: 1fr; gap: 18px; }
     section{
       border: 1px solid var(--line);
       border-radius: var(--r);
@@ -258,25 +235,16 @@
       background: linear-gradient(180deg, var(--card2), var(--card));
       box-shadow: 0 10px 26px rgba(0,0,0,.14);
     }
-    section h2{
-      margin: 0 0 10px;
-      font-size: 20px;
-      letter-spacing: -0.01em;
-    }
+    section h2{ margin: 0 0 10px; font-size: 20px; letter-spacing: -0.01em; }
     section p{ margin: 10px 0; color: var(--muted); }
 
-    .grid2{
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
+    .grid2{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     @media (max-width: 860px){
       header{ grid-template-columns: 1fr; }
       .viewport{ aspect-ratio: 16 / 10; }
       .grid2{ grid-template-columns: 1fr; }
     }
 
-    /* Tables */
     table{
       width: 100%;
       border-collapse: collapse;
@@ -316,12 +284,7 @@
       margin-top: 12px;
     }
 
-    footer{
-      margin-top: 20px;
-      color: var(--muted);
-      text-align: center;
-      font-size: 13px;
-    }
+    footer{ margin-top: 20px; color: var(--muted); text-align: center; font-size: 13px; }
     .pill{
       display: inline-flex;
       gap: 8px;
@@ -349,9 +312,9 @@
           <span>быстро • сочно • без лишних слов</span>
         </div>
 
-        <h1>Хот-дог</h1>
+        <h1>Хот‑дог</h1>
         <p class="subtitle">
-          Мини-страница с каруселью изображений, таблицами ингредиентов и идей — удобно хранить как заметку.
+          Мини‑страница с каруселью изображений, таблицами ингредиентов и идей — удобно хранить как заметку.
         </p>
 
         <div class="chips" aria-label="Теги">
@@ -399,7 +362,7 @@
                 loading="lazy"
                 referrerpolicy="no-referrer"
               />
-              <figcaption class="caption">Несколько хот-догов сразу (3/4)</figcaption>
+              <figcaption class="caption">Несколько хот‑догов сразу (3/4)</figcaption>
             </figure>
 
             <figure class="slide">
@@ -431,13 +394,13 @@
             <thead>
               <tr>
                 <th style="width:42%">Что</th>
-                <th style="width:18%">Кол-во</th>
+                <th style="width:18%">Кол‑во</th>
                 <th>Комментарий</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Булочка для хот-дога</td>
+                <td>Булочка для хот‑дога</td>
                 <td>1 шт.</td>
                 <td>слегка подрумянить на сухой сковороде</td>
               </tr>
@@ -462,3 +425,162 @@
                 <td>лук, огурцы, сыр, халапеньо, зелень…</td>
               </tr>
             </tbody>
+          </table>
+
+          <div class="hint">
+            <strong>Лайфхак:</strong> если булочка размокает — нанеси соус не на булку,
+            а на сосиску (или используй «две тонкие полосы»).
+          </div>
+        </section>
+
+        <section id="assembly" aria-label="Сборка">
+          <h2>Сборка</h2>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:16%">Шаг</th>
+                <th>Действие</th>
+                <th style="width:28%">Подсказка</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Прогрей сосиску (сковорода/гриль/кипяток)</td>
+                <td>важна сочность, не пересуши</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Подрумянь булочку и сделай надрез</td>
+                <td>30–60 секунд на сухой сковороде</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Уложи сосиску, добавь соусы</td>
+                <td>в меру — иначе «поплывёт»</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Дополни топпингами и подавай</td>
+                <td>хрустящий элемент обязателен</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            Вариативность — главный плюс хот‑дога: можно сделать «минималистичный»
+            или собрать плотный комбо‑перекус.
+          </p>
+        </section>
+      </div>
+
+      <section id="toppings" aria-label="Идеи топпингов">
+        <h2>Идеи топпингов</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:26%">Стиль</th>
+              <th style="width:44%">Комбинация</th>
+              <th>Зачем это</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Классика</td>
+              <td>горчица + (опц.) кетчуп</td>
+              <td>понятный вкус, минимум отвлечений</td>
+            </tr>
+            <tr>
+              <td>Хруст</td>
+              <td>жареный лук + маринованный огурец</td>
+              <td>контраст текстур, «щёлкает»</td>
+            </tr>
+            <tr>
+              <td>BBQ</td>
+              <td>соус BBQ + халапеньо + чеддер</td>
+              <td>дымность + острота + сливочность</td>
+            </tr>
+            <tr>
+              <td>Свежий</td>
+              <td>томат + зелень + лёгкий соус</td>
+              <td>меньше тяжести, больше «свежести»</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          <strong>Правило баланса:</strong> соус (влага) + кислота (огурец/лайм) +
+          хруст (лук) + жирность (сыр) — почти всегда работает.
+        </div>
+      </section>
+
+      <footer>
+        <span class="pill">
+          <span class="badge" aria-hidden="true"></span>
+          <span>Сохрани как <strong>hotdog_fixed.html</strong> и открывай в браузере.</span>
+        </span>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    (function(){
+      const track = document.getElementById("track");
+      const prevBtn = document.getElementById("prev");
+      const nextBtn = document.getElementById("next");
+      const dotsWrap = document.getElementById("dots");
+      const carousel = document.getElementById("gallery");
+
+      if (!track || !prevBtn || !nextBtn || !dotsWrap || !carousel) return;
+
+      const slides = Array.from(track.querySelectorAll(".slide"));
+      if (!slides.length) return;
+
+      let index = 0;
+
+      function clamp(i){
+        const n = slides.length;
+        return (i % n + n) % n;
+      }
+
+      function renderDots(){
+        dotsWrap.innerHTML = "";
+        slides.forEach((_, i) => {
+          const b = document.createElement("button");
+          b.className = "dot";
+          b.type = "button";
+          b.setAttribute("aria-label", "Перейти к слайду " + (i+1));
+          b.addEventListener("click", (e) => { e.preventDefault(); goTo(i); });
+          dotsWrap.appendChild(b);
+        });
+      }
+
+      function updateDots(){
+        const dots = Array.from(dotsWrap.querySelectorAll(".dot"));
+        dots.forEach((d, i) => d.setAttribute("aria-current", String(i === index)));
+      }
+
+      function goTo(i){
+        index = clamp(i);
+        track.style.transform = "translateX(-" + (index * 100) + "%)";
+        updateDots();
+      }
+
+      function next(){ goTo(index + 1); }
+      function prev(){ goTo(index - 1); }
+
+      renderDots();
+      goTo(0);
+
+      nextBtn.addEventListener("click", (e) => { e.preventDefault(); next(); });
+      prevBtn.addEventListener("click", (e) => { e.preventDefault(); prev(); });
+
+      // keyboard navigation
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") prev();
+        if (e.key === "ArrowRight") next();
+      });
+    })();
+  </script>
+</body>
+</html>
