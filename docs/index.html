@@ -28,4 +28,437 @@
         --card2: rgba(0,0,0,.06);
         --text: rgba(0,0,0,.88);
         --muted: rgba(0,0,0,.62);
-        --li
+        --line: rgba(0,0,0,.12);
+        --shadow: 0 14px 40px rgba(0,0,0,.10);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      background:
+        radial-gradient(1100px 520px at 20% -10%, rgba(255,183,3,.25), transparent 60%),
+        radial-gradient(900px 460px at 95% 10%, rgba(251,133,0,.22), transparent 55%),
+        radial-gradient(900px 520px at 35% 110%, rgba(255,255,255,.07), transparent 55%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 28px 18px 64px; }
+    header{
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      align-items: center;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--r) + 8px);
+      background: linear-gradient(180deg, var(--card2), var(--card));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+    header::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(520px 240px at 20% 0%, rgba(255,183,3,.20), transparent 60%);
+      pointer-events:none;
+    }
+
+    .title{
+      position: relative;
+      z-index: 1;
+    }
+    .kicker{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--muted);
+      background: rgba(255,255,255,.03);
+    }
+    h1{
+      margin: 14px 0 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    .subtitle{
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 52ch;
+    }
+    .chips{
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .chip{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    nav{
+      margin: 20px 0 0;
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+    .navlink{
+      border: 1px solid var(--line);
+      padding: 9px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      font-size: 14px;
+    }
+    .navlink:hover{ background: rgba(255,255,255,.06); }
+
+    /* Carousel */
+    .carousel{
+      border-radius: calc(var(--r) + 10px);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      background: rgba(255,255,255,.03);
+      box-shadow: 0 10px 30px rgba(0,0,0,.22);
+      position: relative;
+      z-index: 1;
+    }
+    .viewport{
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      position: relative;
+    }
+    .track{
+      display:flex;
+      height: 100%;
+      transform: translateX(0%);
+      transition: transform 400ms ease;
+    }
+    figure.slide{
+      margin: 0;
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+      display: grid;
+      place-items: center;
+      background: rgba(0,0,0,.12);
+    }
+    figure.slide img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display:block;
+      filter: saturate(1.05) contrast(1.02);
+      transform: scale(1.01);
+    }
+    .caption{
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(0,0,0,.00), rgba(0,0,0,.40));
+      color: rgba(255,255,255,.92);
+      font-size: 13px;
+      border: 1px solid rgba(255,255,255,.16);
+      backdrop-filter: blur(10px);
+    }
+
+    .controls{
+      position: absolute;
+      inset: 0;
+      display:flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+      padding: 10px;
+    }
+    .btn{
+      pointer-events: auto;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(0,0,0,.28);
+      color: white;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      display:grid;
+      place-items: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+    @media (prefers-color-scheme: light){
+      .btn{
+        background: rgba(255,255,255,.70);
+        color: rgba(0,0,0,.85);
+        border: 1px solid rgba(0,0,0,.12);
+      }
+      .caption{
+        background: linear-gradient(180deg, rgba(255,255,255,.00), rgba(0,0,0,.45));
+      }
+    }
+    .btn:active{ transform: translateY(1px); }
+    .btn:focus{ outline: 2px solid rgba(255,183,3,.55); outline-offset: 2px; }
+
+    .dots{
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 10px;
+      display:flex;
+      justify-content: center;
+      gap: 8px;
+      pointer-events: auto;
+    }
+    .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.35);
+      background: rgba(255,255,255,.18);
+      cursor: pointer;
+    }
+    .dot[aria-current="true"]{
+      background: var(--accent);
+      border-color: rgba(0,0,0,.2);
+      box-shadow: 0 0 0 3px rgba(255,183,3,.25);
+    }
+
+    /* Layout sections */
+    main{
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    section{
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 18px;
+      background: linear-gradient(180deg, var(--card2), var(--card));
+      box-shadow: 0 10px 26px rgba(0,0,0,.14);
+    }
+    section h2{
+      margin: 0 0 10px;
+      font-size: 20px;
+      letter-spacing: -0.01em;
+    }
+    section p{ margin: 10px 0; color: var(--muted); }
+
+    .grid2{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 860px){
+      header{ grid-template-columns: 1fr; }
+      .viewport{ aspect-ratio: 16 / 10; }
+      .grid2{ grid-template-columns: 1fr; }
+    }
+
+    /* Tables */
+    table{
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+    }
+    thead th{
+      text-align: left;
+      font-weight: 600;
+      font-size: 13px;
+      color: rgba(255,255,255,.92);
+      background: rgba(255,183,3,.14);
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+    }
+    @media (prefers-color-scheme: light){
+      thead th{ color: rgba(0,0,0,.86); }
+    }
+    tbody td{
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+      vertical-align: top;
+    }
+    tbody tr:last-child td{ border-bottom: none; }
+    tbody tr:hover td{ background: rgba(255,255,255,.03); }
+
+    .hint{
+      border-left: 4px solid var(--accent);
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,183,3,.10);
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    footer{
+      margin-top: 20px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+    }
+    .pill{
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+    }
+    .badge{
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: var(--accent2);
+      box-shadow: 0 0 0 3px rgba(251,133,0,.18);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <div class="kicker" aria-label="Короткое описание">
+          <span class="badge" aria-hidden="true"></span>
+          <span>быстро • сочно • без лишних слов</span>
+        </div>
+
+        <h1>Хот-дог</h1>
+        <p class="subtitle">
+          Мини-страница с каруселью изображений, таблицами ингредиентов и идей — удобно хранить как заметку.
+        </p>
+
+        <div class="chips" aria-label="Теги">
+          <span class="chip">еда</span>
+          <span class="chip">перекус</span>
+          <span class="chip">html</span>
+          <span class="chip">карусель</span>
+        </div>
+
+        <nav aria-label="Навигация по странице">
+          <a class="navlink" href="#gallery">Карусель</a>
+          <a class="navlink" href="#ingredients">Ингредиенты</a>
+          <a class="navlink" href="#assembly">Сборка</a>
+          <a class="navlink" href="#toppings">Топпинги</a>
+        </nav>
+      </div>
+
+      <div class="carousel" id="gallery" aria-label="Галерея хот-догов">
+        <div class="viewport">
+          <div class="track" id="track">
+            <figure class="slide">
+              <img
+                src="https://commons.wikimedia.org/wiki/Special:FilePath/NCI%20Visuals%20Food%20Hot%20Dog.jpg"
+                alt="Хот-дог с горчицей на белом фоне"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+              />
+              <figcaption class="caption">Классика: сосиска + горчица (1/4)</figcaption>
+            </figure>
+
+            <figure class="slide">
+              <img
+                src="https://commons.wikimedia.org/wiki/Special:FilePath/Hot%20dog%20on%20a%20plate%20-%20Evan%20Swigart.jpg"
+                alt="Хот-дог на тарелке"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+              />
+              <figcaption class="caption">Подача на тарелке (2/4)</figcaption>
+            </figure>
+
+            <figure class="slide">
+              <img
+                src="https://commons.wikimedia.org/wiki/Special:FilePath/Papaya%20King%20hot%20dogs.jpg"
+                alt="Хот-доги на тарелке в кафе"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+              />
+              <figcaption class="caption">Несколько хот-догов сразу (3/4)</figcaption>
+            </figure>
+
+            <figure class="slide">
+              <img
+                src="https://commons.wikimedia.org/wiki/Special:FilePath/Sonoran-hot-dog-01.jpg"
+                alt="Сонорский хот-дог с бобами и томатами"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+              />
+              <figcaption class="caption">Вариант «пожирнее»: фасоль/овощи (4/4)</figcaption>
+            </figure>
+          </div>
+
+          <div class="controls" aria-hidden="false">
+            <button class="btn" id="prev" type="button" aria-label="Предыдущее изображение">‹</button>
+            <button class="btn" id="next" type="button" aria-label="Следующее изображение">›</button>
+          </div>
+
+          <div class="dots" id="dots" aria-label="Переключение слайдов"></div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="grid2">
+        <section id="ingredients" aria-label="Ингредиенты">
+          <h2>Ингредиенты</h2>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:42%">Что</th>
+                <th style="width:18%">Кол-во</th>
+                <th>Комментарий</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Булочка для хот-дога</td>
+                <td>1 шт.</td>
+                <td>слегка подрумянить на сухой сковороде</td>
+              </tr>
+              <tr>
+                <td>Сосиска</td>
+                <td>1 шт.</td>
+                <td>подойдёт говядина/курица/веган</td>
+              </tr>
+              <tr>
+                <td>Горчица</td>
+                <td>по вкусу</td>
+                <td>тонкой полосой — равномернее вкус</td>
+              </tr>
+              <tr>
+                <td>Кетчуп</td>
+                <td>опц.</td>
+                <td>если хочется сладости</td>
+              </tr>
+              <tr>
+                <td>Топпинги</td>
+                <td>опц.</td>
+                <td>лук, огурцы, сыр, халапеньо, зелень…</td>
+              </tr>
+            </tbody>
