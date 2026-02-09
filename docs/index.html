@@ -4,28 +4,31 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Хот-дог — мини-страница</title>
-  <meta name="description" content="Красивая HTML-страничка про хот-дог с каруселью изображений и таблицами." />
+  <meta name="description" content="HTML-страничка про хот-дог с каруселью изображений, таблицами и parallax-фоном." />
 
   <style>
     :root{
-      --bg: #0b0f14;
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.08);
+      /* Colors */
+      --bg0: #070a10;
+      --bg1: rgba(255,255,255,.06);
+      --bg2: rgba(255,255,255,.085);
       --text: rgba(255,255,255,.92);
       --muted: rgba(255,255,255,.68);
       --line: rgba(255,255,255,.14);
       --shadow: 0 14px 50px rgba(0,0,0,.55);
       --r: 18px;
       --max: 1040px;
-      --accent: #ffb703;
-      --accent2: #fb8500;
+
+      /* Accent */
+      --accent: #ffb703;  /* mustard */
+      --accent2: #fb8500; /* sauce */
     }
 
     @media (prefers-color-scheme: light){
       :root{
-        --bg: #f6f7fb;
-        --card: rgba(0,0,0,.04);
-        --card2: rgba(0,0,0,.06);
+        --bg0: #f6f7fb;
+        --bg1: rgba(0,0,0,.04);
+        --bg2: rgba(0,0,0,.06);
         --text: rgba(0,0,0,.88);
         --muted: rgba(0,0,0,.62);
         --line: rgba(0,0,0,.12);
@@ -38,19 +41,95 @@
     body{
       margin: 0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
-      background:
-        radial-gradient(1100px 520px at 20% -10%, rgba(255,183,3,.25), transparent 60%),
-        radial-gradient(900px 460px at 95% 10%, rgba(251,133,0,.22), transparent 55%),
-        radial-gradient(900px 520px at 35% 110%, rgba(255,255,255,.07), transparent 55%),
-        var(--bg);
+      background: var(--bg0); /* Real background sits in .parallax */
       color: var(--text);
       line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* =====================
+       Parallax background
+       ===================== */
+    .parallax{
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+      background: var(--bg0);
+    }
+
+    .layer{
+      position: absolute;
+      inset: -14%;
+      transform: translate3d(0,0,0);
+      will-change: transform;
+      opacity: 1;
+    }
+
+    /* Layer 1: soft blobs */
+    .layer.l1{
+      background:
+        radial-gradient(900px 520px at 20% -10%, rgba(255,183,3,.22), transparent 62%),
+        radial-gradient(760px 460px at 95% 12%, rgba(251,133,0,.20), transparent 60%),
+        radial-gradient(720px 520px at 35% 112%, rgba(255,255,255,.07), transparent 64%);
+      filter: saturate(1.02);
+    }
+
+    /* Layer 2: subtle vignette + depth */
+    .layer.l2{
+      background:
+        radial-gradient(1400px 900px at 50% 35%, rgba(0,0,0,.00), rgba(0,0,0,.44)),
+        radial-gradient(1000px 700px at 80% 80%, rgba(0,0,0,.00), rgba(0,0,0,.34));
+      opacity: .85;
+      mix-blend-mode: multiply;
+    }
+    @media (prefers-color-scheme: light){
+      .layer.l2{
+        background:
+          radial-gradient(1400px 900px at 50% 35%, rgba(255,255,255,.00), rgba(0,0,0,.14)),
+          radial-gradient(1000px 700px at 80% 80%, rgba(255,255,255,.00), rgba(0,0,0,.10));
+        mix-blend-mode: normal;
+        opacity: .65;
+      }
+    }
+
+    /* Layer 3: very fine pattern */
+    .layer.l3{
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(255,255,255,.06) 0px,
+          rgba(255,255,255,.06) 1px,
+          rgba(255,255,255,.00) 1px,
+          rgba(255,255,255,.00) 10px
+        );
+      opacity: .22;
+    }
+    @media (prefers-color-scheme: light){
+      .layer.l3{
+        background:
+          repeating-linear-gradient(
+            135deg,
+            rgba(0,0,0,.05) 0px,
+            rgba(0,0,0,.05) 1px,
+            rgba(0,0,0,.00) 1px,
+            rgba(0,0,0,.00) 12px
+          );
+        opacity: .16;
+      }
+    }
+
+    /* Reduced motion: disable parallax transforms */
+    @media (prefers-reduced-motion: reduce){
+      .layer{ transform: none !important; }
     }
 
     a{ color: inherit; text-decoration: none; }
     a:hover{ text-decoration: underline; }
 
     .wrap{ max-width: var(--max); margin: 0 auto; padding: 28px 18px 64px; }
+
     header{
       display: grid;
       grid-template-columns: 1.15fr .85fr;
@@ -59,22 +138,25 @@
       padding: 22px;
       border: 1px solid var(--line);
       border-radius: calc(var(--r) + 8px);
-      background: linear-gradient(180deg, var(--card2), var(--card));
+      background: linear-gradient(180deg, var(--bg2), var(--bg1));
       box-shadow: var(--shadow);
       overflow: hidden;
       position: relative;
+      backdrop-filter: blur(10px);
     }
     header::before{
       content:"";
       position:absolute;
       inset:-2px;
-      background: radial-gradient(520px 240px at 20% 0%, rgba(255,183,3,.20), transparent 60%);
+      background: radial-gradient(520px 240px at 20% 0%, rgba(255,183,3,.18), transparent 60%);
       pointer-events:none;
     }
 
     .title{ position: relative; z-index: 1; }
     .kicker{
-      display: inline-flex; align-items: center; gap: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       padding: 6px 10px;
       border: 1px solid var(--line);
       border-radius: 999px;
@@ -165,8 +247,6 @@
       z-index: 1;
     }
 
-    /* IMPORTANT FIX:
-       Don't disable pointer events on the overlay container; some webviews treat it as disabling the whole subtree. */
     .controls{
       position: absolute;
       inset: 0;
@@ -210,7 +290,7 @@
       display:flex;
       justify-content: center;
       gap: 8px;
-      z-index: 4; /* above controls */
+      z-index: 4;
     }
     .dot{
       width: 10px;
@@ -227,13 +307,15 @@
       box-shadow: 0 0 0 3px rgba(255,183,3,.25);
     }
 
+    /* Layout sections */
     main{ margin-top: 22px; display: grid; grid-template-columns: 1fr; gap: 18px; }
     section{
       border: 1px solid var(--line);
       border-radius: var(--r);
       padding: 18px;
-      background: linear-gradient(180deg, var(--card2), var(--card));
+      background: linear-gradient(180deg, var(--bg2), var(--bg1));
       box-shadow: 0 10px 26px rgba(0,0,0,.14);
+      backdrop-filter: blur(10px);
     }
     section h2{ margin: 0 0 10px; font-size: 20px; letter-spacing: -0.01em; }
     section p{ margin: 10px 0; color: var(--muted); }
@@ -245,6 +327,7 @@
       .grid2{ grid-template-columns: 1fr; }
     }
 
+    /* Tables */
     table{
       width: 100%;
       border-collapse: collapse;
@@ -304,6 +387,12 @@
 </head>
 
 <body>
+  <div class="parallax" aria-hidden="true">
+    <div class="layer l1" data-speed="0.10"></div>
+    <div class="layer l2" data-speed="0.18"></div>
+    <div class="layer l3" data-speed="0.26"></div>
+  </div>
+
   <div class="wrap">
     <header>
       <div class="title">
@@ -314,7 +403,7 @@
 
         <h1>Хот‑дог</h1>
         <p class="subtitle">
-          Мини‑страница с каруселью изображений, таблицами ингредиентов и идей — удобно хранить как заметку.
+          Мини‑страница с каруселью изображений, таблицами ингредиентов и parallax‑фоном.
         </p>
 
         <div class="chips" aria-label="Теги">
@@ -322,6 +411,7 @@
           <span class="chip">перекус</span>
           <span class="chip">html</span>
           <span class="chip">карусель</span>
+          <span class="chip">parallax</span>
         </div>
 
         <nav aria-label="Навигация по странице">
@@ -399,31 +489,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Булочка для хот‑дога</td>
-                <td>1 шт.</td>
-                <td>слегка подрумянить на сухой сковороде</td>
-              </tr>
-              <tr>
-                <td>Сосиска</td>
-                <td>1 шт.</td>
-                <td>подойдёт говядина/курица/веган</td>
-              </tr>
-              <tr>
-                <td>Горчица</td>
-                <td>по вкусу</td>
-                <td>тонкой полосой — равномернее вкус</td>
-              </tr>
-              <tr>
-                <td>Кетчуп</td>
-                <td>опц.</td>
-                <td>если хочется сладости</td>
-              </tr>
-              <tr>
-                <td>Топпинги</td>
-                <td>опц.</td>
-                <td>лук, огурцы, сыр, халапеньо, зелень…</td>
-              </tr>
+              <tr><td>Булочка для хот‑дога</td><td>1 шт.</td><td>слегка подрумянить на сухой сковороде</td></tr>
+              <tr><td>Сосиска</td><td>1 шт.</td><td>подойдёт говядина/курица/веган</td></tr>
+              <tr><td>Горчица</td><td>по вкусу</td><td>тонкой полосой — равномернее вкус</td></tr>
+              <tr><td>Кетчуп</td><td>опц.</td><td>если хочется сладости</td></tr>
+              <tr><td>Топпинги</td><td>опц.</td><td>лук, огурцы, сыр, халапеньо, зелень…</td></tr>
             </tbody>
           </table>
 
@@ -444,26 +514,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Прогрей сосиску (сковорода/гриль/кипяток)</td>
-                <td>важна сочность, не пересуши</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Подрумянь булочку и сделай надрез</td>
-                <td>30–60 секунд на сухой сковороде</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Уложи сосиску, добавь соусы</td>
-                <td>в меру — иначе «поплывёт»</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>Дополни топпингами и подавай</td>
-                <td>хрустящий элемент обязателен</td>
-              </tr>
+              <tr><td>1</td><td>Прогрей сосиску (сковорода/гриль/кипяток)</td><td>важна сочность, не пересуши</td></tr>
+              <tr><td>2</td><td>Подрумянь булочку и сделай надрез</td><td>30–60 секунд на сухой сковороде</td></tr>
+              <tr><td>3</td><td>Уложи сосиску, добавь соусы</td><td>в меру — иначе «поплывёт»</td></tr>
+              <tr><td>4</td><td>Дополни топпингами и подавай</td><td>хрустящий элемент обязателен</td></tr>
             </tbody>
           </table>
 
@@ -485,26 +539,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Классика</td>
-              <td>горчица + (опц.) кетчуп</td>
-              <td>понятный вкус, минимум отвлечений</td>
-            </tr>
-            <tr>
-              <td>Хруст</td>
-              <td>жареный лук + маринованный огурец</td>
-              <td>контраст текстур, «щёлкает»</td>
-            </tr>
-            <tr>
-              <td>BBQ</td>
-              <td>соус BBQ + халапеньо + чеддер</td>
-              <td>дымность + острота + сливочность</td>
-            </tr>
-            <tr>
-              <td>Свежий</td>
-              <td>томат + зелень + лёгкий соус</td>
-              <td>меньше тяжести, больше «свежести»</td>
-            </tr>
+            <tr><td>Классика</td><td>горчица + (опц.) кетчуп</td><td>понятный вкус, минимум отвлечений</td></tr>
+            <tr><td>Хруст</td><td>жареный лук + маринованный огурец</td><td>контраст текстур, «щёлкает»</td></tr>
+            <tr><td>BBQ</td><td>соус BBQ + халапеньо + чеддер</td><td>дымность + острота + сливочность</td></tr>
+            <tr><td>Свежий</td><td>томат + зелень + лёгкий соус</td><td>меньше тяжести, больше «свежести»</td></tr>
           </tbody>
         </table>
 
@@ -517,13 +555,16 @@
       <footer>
         <span class="pill">
           <span class="badge" aria-hidden="true"></span>
-          <span>Сохрани как <strong>hotdog_fixed.html</strong> и открывай в браузере.</span>
+          <span>Сохрани как <strong>hotdog_parallax.html</strong> и открывай в браузере.</span>
         </span>
       </footer>
     </main>
   </div>
 
   <script>
+    // =====================
+    // Carousel
+    // =====================
     (function(){
       const track = document.getElementById("track");
       const prevBtn = document.getElementById("prev");
@@ -575,11 +616,42 @@
       nextBtn.addEventListener("click", (e) => { e.preventDefault(); next(); });
       prevBtn.addEventListener("click", (e) => { e.preventDefault(); prev(); });
 
-      // keyboard navigation
       document.addEventListener("keydown", (e) => {
         if (e.key === "ArrowLeft") prev();
         if (e.key === "ArrowRight") next();
       });
+    })();
+
+    // =====================
+    // Parallax background
+    // =====================
+    (function(){
+      const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduce) return;
+
+      const layers = Array.from(document.querySelectorAll(".parallax .layer"));
+      if (!layers.length) return;
+
+      let ticking = false;
+
+      function update(){
+        const y = window.scrollY || 0;
+        for (const el of layers){
+          const s = parseFloat(el.getAttribute("data-speed") || "0.1");
+          el.style.transform = "translate3d(0," + (-y * s).toFixed(2) + "px,0)";
+        }
+        ticking = false;
+      }
+
+      function onScroll(){
+        if (!ticking){
+          ticking = true;
+          window.requestAnimationFrame(update);
+        }
+      }
+
+      update();
+      window.addEventListener("scroll", onScroll, { passive: true });
     })();
   </script>
 </body>
